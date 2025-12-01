@@ -1,0 +1,27 @@
+# ====================================
+# IntelliJ IDEA
+# ====================================
+.idea/
+*.iml
+*.iws
+
+# ====================================
+# JMeter - Archivos Generados (Resultados)
+# ====================================
+
+*.log
+jmeter.log
+
+# Resultados crudos de la prueba
+*.jtl
+results.jtl
+
+# Carpeta de reportes HTML (Dashboard)
+report/
+dashboard/
+
+# ====================================
+# Sistema Operativo
+# ====================================
+.DS_Store
+Thumbs.db

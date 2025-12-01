@@ -1,0 +1,36 @@
+# Conclusiones del Ejercicio de Pruebas de Carga
+
+## Resumen Ejecutivo
+Se ha ejecutado la prueba de carga para el servicio de autenticación (`/auth/login`) de `fakestoreapi.com`. El objetivo fue validar la capacidad del sistema para manejar una carga de 20 Transacciones por Segundo (TPS).
+
+**Resultado de la Prueba: NO EXITOSA** (Debido a tasa de errores).
+
+## Hallazgos y Observaciones
+
+### 1. Diseño de la Prueba
+- **Escalabilidad**: Se simuló la carga de 20 usuarios concurrentes.
+- **Datos de Prueba**: Se utilizó el archivo `users.csv`.
+- **Validaciones**: Se ajustó la validación de éxito para esperar el código **201 Created** (comportamiento real del API) en lugar de 200 OK.
+
+### 2. Resultados Obtenidos
+Basado en el análisis del archivo `results.jtl` y el reporte generado:
+
+- **Volumen Total**: ~3,841 peticiones procesadas.
+- **Tasa de Éxito**: ~83.3% (3,200 peticiones exitosas con código 201).
+- **Tasa de Error**: **~16.7%** (641 peticiones fallidas con código 401).
+    - **Causa del Error**: El servidor respondió con `401 Unauthorized`. Esto indica que algunas credenciales en el archivo `users.csv` son inválidas o expiraron durante la prueba.
+    - **Cumplimiento SLA**: **NO CUMPLE**. La tasa de error (16.7%) excede significativamente el máximo permitido del 3%.
+
+- **Tiempos de Respuesta (Latencia)**:
+    - **Promedio**: ~300ms - 400ms.
+    - **Máximo**: Picos ocasionales de ~1200ms.
+    - **Cumplimiento SLA**: **CUMPLE**. La gran mayoría de las peticiones se mantuvieron por debajo del límite de 1.5 segundos (1500ms).
+
+### 3. Ejecución y Herramientas
+- **Versión de JMeter**: Se utilizó **JMeter 5.6.3**.
+- **Reportería**: Se generaron exitosamente los reportes HTML (Dashboard Report) y el archivo de logs JTL.
+
+## Conclusiones Finales
+1.  **Performance del Servidor**: El servidor `fakestoreapi.com` demostró capacidad para manejar la concurrencia de 20 TPS con tiempos de respuesta excelentes (< 500ms en promedio).
+2.  **Calidad de Datos**: La prueba falló en el criterio de estabilidad debido a una alta tasa de errores de autenticación (401). Se recomienda revisar y limpiar el archivo `users.csv` para asegurar que todos los usuarios sean válidos antes de la próxima ejecución.
+3.  **Infraestructura de Pruebas**: Usar JMeter 5.6.3 permitió una mejor visibilidad de estos problemas a través de los reportes nativos.
